@@ -89,7 +89,6 @@ export default function Home() {
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
-          imageRendering: "high-quality",
           WebkitBackfaceVisibility: "hidden",
           backfaceVisibility: "hidden",
         }}
