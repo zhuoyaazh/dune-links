@@ -107,10 +107,10 @@ export default function Home() {
         {/* Header */}
         <div className="text-center space-y-3">
           <p className="dune-heading text-[11px] uppercase text-dune-accent">
-            Pusat Tautan Panitia Pemilu
+            Link-Link Penting
           </p>
-          <h1 className="dune-heading text-glow uppercase text-4xl md:text-5xl text-dune-primary whitespace-nowrap">
-            HIMAFI ITB 2026/2027
+          <h1 className="dune-heading text-glow uppercase text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-dune-primary">
+            PEMILU HIMAFI ITB 2026/2027
           </h1>
           <p className="font-garet text-sm md:text-base opacity-80 max-w-xl mx-auto leading-relaxed">
             Hub terpusat untuk dokumen dan link penting Pemilu. Diperbarui secara otomatis dari Google Sheet.
@@ -185,7 +185,7 @@ export default function Home() {
 
         {/* Footer */}
         <footer className="text-[10px] font-garet font-black opacity-40 text-center tracking-[0.3em]">
-          DIPERSEMBAHKAN OLEH PANITIA PEMILU HIMAFI ITB 2026/2027
+          PANITIA PEMILU HIMAFI 2026/2027
         </footer>
       </div>
     </main>
