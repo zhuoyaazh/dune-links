@@ -40,6 +40,12 @@ h1, h2, h3, .font-dune {
   animation: glow-pulse 3s ease-in-out infinite alternate;
 }
 
+@media (max-width: 768px) {
+  .text-glow {
+    animation: none;
+  }
+}
+
 @keyframes glow-pulse {
   from {
     text-shadow: 

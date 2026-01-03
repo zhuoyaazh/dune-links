@@ -100,7 +100,7 @@ export default function Home() {
       {/* Texture layers */}
       <div className="bg-grain z-10" aria-hidden></div>
       <div className="absolute inset-0 opacity-10 bg-halftone from-dune-text to-transparent bg-size-[16px_16px] pointer-events-none z-10" aria-hidden></div>
-      <div className="absolute -top-30 left-1/2 -translate-x-1/2 w-130 h-130 bg-dune-accent blur-[150px] opacity-30 rounded-full pointer-events-none z-10" aria-hidden></div>
+      <div className="absolute -top-30 left-1/2 -translate-x-1/2 w-130 h-130 bg-dune-accent blur-[70px] md:blur-[150px] opacity-30 rounded-full pointer-events-none z-10" aria-hidden></div>
 
       {/* Content */}
       <div className="z-20 w-full max-w-3xl flex flex-col gap-10">
