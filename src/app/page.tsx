@@ -1,20 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Papa from "papaparse";
-import type { ParseResult } from "papaparse";
 
 // GANTI DENGAN LINK CSV PUBLISH TO WEB KAMU:
 // Kolom yang dibaca: Label, URL, IsActive, Category (opsional)
 const SHEET_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQnSfWYYb6UYzNSAD8ydmA7ahdkGJGiehNDLOSq6ZVj8CsxjoiJGYSd1rUDziOQ8JcHKeWri6jffV2N/pub?gid=0&single=true&output=csv";
 
-type SheetRow = {
-  Label?: string;
-  URL?: string;
-  IsActive?: string;
-  Category?: string;
-};
+const CACHE_KEY = "dune_links_cache";
 
 type LinkItem = {
   label: string;
@@ -28,46 +21,68 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // Load cached data immediately
+    const cachedData = localStorage.getItem(CACHE_KEY);
+    if (cachedData) {
+      try {
+        const parsed = JSON.parse(cachedData) as LinkItem[];
+        setLinks(parsed);
+        setLoading(false);
+      } catch (e) {
+        console.error("Cache parse error:", e);
+      }
+    }
+
+    // Fetch and parse data in background
     const fetchData = async () => {
       try {
         const response = await fetch(SHEET_URL);
         const csvText = await response.text();
 
-        Papa.parse<SheetRow>(csvText, {
-          header: true,
-          skipEmptyLines: true,
-          complete: (results: ParseResult<SheetRow>) => {
-            const normalized = results.data
-              .map<LinkItem | null>((row) => {
-                const label = row.Label?.trim();
-                const url = row.URL?.trim();
-                const isActive = (row.IsActive || "").toLowerCase() === "true";
-                if (!label || !url || !isActive) return null;
-                return {
-                  label,
-                  url,
-                  category: row.Category?.trim() || "Umum",
-                };
-              })
-              .filter((item): item is LinkItem => Boolean(item));
+        // Use Web Worker for parsing
+        const worker = new Worker(
+          new URL("../workers/csvParser.worker.ts", import.meta.url),
+          { type: "module" }
+        );
 
-            setLinks(normalized);
-            setLoading(false);
-          },
-          error: (error: Error) => {
-            console.error("Papa parse error", error);
+        worker.postMessage(csvText);
+        worker.onmessage = (event: MessageEvent<{ success: boolean; data?: LinkItem[]; error?: string }>) => {
+          if (event.data.success && event.data.data) {
+            setLinks(event.data.data);
+            // Cache the data
+            localStorage.setItem(CACHE_KEY, JSON.stringify(event.data.data));
+            setError(null);
+          } else {
+            console.error("Worker parse error:", event.data.error);
             setError("Gagal parsing CSV. Cek struktur kolom.");
-            setLoading(false);
-          },
-        });
+          }
+          setLoading(false);
+          worker.terminate();
+        };
+
+        worker.onerror = (error) => {
+          console.error("Worker error:", error);
+          setError("Gagal mengambil data. Pastikan link publish to web benar.");
+          setLoading(false);
+          worker.terminate();
+        };
       } catch (_error) {
         console.error("Gagal mengambil data:", _error);
-        setError("Gagal mengambil data. Pastikan link publish to web benar.");
+        // If fetch fails but we have cache, don't show error
+        if (!localStorage.getItem(CACHE_KEY)) {
+          setError("Gagal mengambil data. Pastikan link publish to web benar.");
+        }
         setLoading(false);
       }
     };
 
-    fetchData();
+    // Only fetch if we don't have cached data or after delay
+    if (!cachedData) {
+      fetchData();
+    } else {
+      // Fetch in background after showing cache
+      setTimeout(fetchData, 500);
+    }
   }, []);
 
   const grouped = useMemo(() => {
