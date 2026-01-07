@@ -21,10 +21,10 @@ export default function MusicPlayer() {
       });
     }
     
-    // Wait for gate animation to finish
+    // Wait for gate animation to finish before showing content
     setTimeout(() => {
       setHasInteracted(true);
-    }, 2000);
+    }, 2100);
   };
 
   // Fungsi toggle manual (tombol pojok kanan bawah)
@@ -51,9 +51,10 @@ export default function MusicPlayer() {
             className={`fixed top-0 left-0 w-1/2 h-screen z-100 transition-transform duration-[2000ms] ease-in-out ${isGateOpening ? '-translate-x-full' : 'translate-x-0'}`}
             style={{
               backgroundImage: "url('/DUNE-GATE4.jpg')",
-              backgroundSize: "200% 100%",
+              backgroundSize: "cover",
               backgroundPosition: "left center",
               backgroundRepeat: "no-repeat",
+              willChange: "transform",
             }}
           >
             <div className="absolute inset-0 bg-black/40"></div>
@@ -65,9 +66,10 @@ export default function MusicPlayer() {
             className={`fixed top-0 right-0 w-1/2 h-screen z-100 transition-transform duration-[2000ms] ease-in-out ${isGateOpening ? 'translate-x-full' : 'translate-x-0'}`}
             style={{
               backgroundImage: "url('/DUNE-GATE4.jpg')",
-              backgroundSize: "200% 100%",
+              backgroundSize: "cover",
               backgroundPosition: "right center",
               backgroundRepeat: "no-repeat",
+              willChange: "transform",
             }}
           >
             <div className="absolute inset-0 bg-black/40"></div>
@@ -76,11 +78,11 @@ export default function MusicPlayer() {
 
           {/* Button Container */}
           {!isGateOpening && (
-            <div className="fixed inset-0 z-[101] flex items-center justify-center pt-32 md:pt-0 pointer-events-none">
+            <div className="fixed inset-0 z-[101] flex items-center justify-center pt-24 md:pt-0 pointer-events-none">
               <div className="pointer-events-auto text-center space-y-6 animate-fade-in-up">
                 <button
                   onClick={enterSite}
-                  className="px-10 py-5 border-2 border-dune-primary text-dune-primary font-dune text-3xl md:text-4xl tracking-[0.3em] uppercase hover:bg-dune-primary hover:text-dune-bg transition-all duration-500 shadow-[0_0_40px_rgba(235,162,102,0.3)] hover:shadow-[0_0_60px_rgba(235,162,102,0.7)]"
+                  className="px-6 py-3 md:px-10 md:py-5 border-2 border-dune-primary text-dune-primary font-dune text-xl md:text-4xl tracking-[0.2em] md:tracking-[0.3em] uppercase hover:bg-dune-primary hover:text-dune-bg transition-all duration-500 shadow-[0_0_40px_rgba(235,162,102,0.3)] hover:shadow-[0_0_60px_rgba(235,162,102,0.7)]"
                 >
                 Enter Arrakis
               </button>

@@ -32,6 +32,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* Preload gate image untuk menghindari lag */}
+        <link rel="preload" as="image" href="/DUNE-GATE4.jpg" />
+        <link rel="preload" as="image" href="/bg-dune-dark.jpg" />
+      </head>
       <body className={`${dune.variable} ${garet.variable} antialiased`}>
         {children}
       </body>
