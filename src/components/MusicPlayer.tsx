@@ -50,7 +50,7 @@ export default function MusicPlayer() {
           <div
             className={`fixed top-0 left-0 w-1/2 h-screen z-100 transition-transform duration-[2000ms] ease-in-out ${isGateOpening ? '-translate-x-full' : 'translate-x-0'}`}
             style={{
-              backgroundImage: "url('/DUNE-GATE5.jpg')",
+              backgroundImage: "url('/bg-dune-dark.jpg')",
               backgroundSize: "200% 100%",
               backgroundPosition: "left center",
               backgroundRepeat: "no-repeat",
@@ -65,7 +65,7 @@ export default function MusicPlayer() {
           <div
             className={`fixed top-0 right-0 w-1/2 h-screen z-100 transition-transform duration-[2000ms] ease-in-out ${isGateOpening ? 'translate-x-full' : 'translate-x-0'}`}
             style={{
-              backgroundImage: "url('/DUNE-GATE5.jpg')",
+              backgroundImage: "url('/bg-dune-dark.jpg')",
               backgroundSize: "200% 100%",
               backgroundPosition: "right center",
               backgroundRepeat: "no-repeat",
