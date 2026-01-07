@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import MusicPlayer from "../components/MusicPlayer";
 
 // GANTI DENGAN LINK CSV PUBLISH TO WEB KAMU:
 // Kolom yang dibaca: Label, URL, IsActive, Category (opsional)
@@ -16,21 +17,35 @@ type LinkItem = {
 };
 
 export default function Home() {
-  const [links, setLinks] = useState<LinkItem[]>([]);
+  // Initialize links from cache if available
+  const [links, setLinks] = useState<LinkItem[]>(() => {
+    if (typeof window !== 'undefined') {
+      const cachedData = localStorage.getItem(CACHE_KEY);
+      if (cachedData) {
+        try {
+          return JSON.parse(cachedData) as LinkItem[];
+        } catch (e) {
+          console.error("Cache parse error:", e);
+        }
+      }
+    }
+    return [];
+  });
+  
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Load cached data immediately
-    const cachedData = localStorage.getItem(CACHE_KEY);
-    if (cachedData) {
-      try {
-        const parsed = JSON.parse(cachedData) as LinkItem[];
-        setLinks(parsed);
-        setLoading(false);
-      } catch (e) {
-        console.error("Cache parse error:", e);
-      }
+    let isMounted = true;
+    
+    // Check if we have cached data
+    const cachedData = typeof window !== 'undefined' ? localStorage.getItem(CACHE_KEY) : null;
+    
+    // If we have cache, set loading to false immediately (async to avoid warning)
+    if (cachedData && isMounted) {
+      Promise.resolve().then(() => {
+        if (isMounted) setLoading(false);
+      });
     }
 
     // Fetch and parse data in background
@@ -48,31 +63,37 @@ export default function Home() {
         worker.postMessage(csvText);
         worker.onmessage = (event: MessageEvent<{ success: boolean; data?: LinkItem[]; error?: string }>) => {
           if (event.data.success && event.data.data) {
-            setLinks(event.data.data);
-            // Cache the data
-            localStorage.setItem(CACHE_KEY, JSON.stringify(event.data.data));
-            setError(null);
+            if (isMounted) {
+              setLinks(event.data.data);
+              // Cache the data
+              localStorage.setItem(CACHE_KEY, JSON.stringify(event.data.data));
+              setError(null);
+            }
           } else {
             console.error("Worker parse error:", event.data.error);
-            setError("Gagal parsing CSV. Cek struktur kolom.");
+            if (isMounted) setError("Gagal parsing CSV. Cek struktur kolom.");
           }
-          setLoading(false);
+          if (isMounted) setLoading(false);
           worker.terminate();
         };
 
         worker.onerror = (error) => {
           console.error("Worker error:", error);
-          setError("Gagal mengambil data. Pastikan link publish to web benar.");
-          setLoading(false);
+          if (isMounted) {
+            setError("Gagal mengambil data. Pastikan link publish to web benar.");
+            setLoading(false);
+          }
           worker.terminate();
         };
       } catch (_error) {
         console.error("Gagal mengambil data:", _error);
-        // If fetch fails but we have cache, don't show error
-        if (!localStorage.getItem(CACHE_KEY)) {
-          setError("Gagal mengambil data. Pastikan link publish to web benar.");
+        if (isMounted) {
+          // If fetch fails but we have cache, don't show error
+          if (!localStorage.getItem(CACHE_KEY)) {
+            setError("Gagal mengambil data. Pastikan link publish to web benar.");
+          }
+          setLoading(false);
         }
-        setLoading(false);
       }
     };
 
@@ -83,6 +104,10 @@ export default function Home() {
       // Fetch in background after showing cache
       setTimeout(fetchData, 500);
     }
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const grouped = useMemo(() => {
@@ -110,7 +135,7 @@ export default function Home() {
       ></div>
 
       {/* Dark Overlay for contrast */}
-      <div className="absolute inset-0 z-[1] bg-black/60"></div>
+      <div className="absolute inset-0 z-1 bg-black/60"></div>
 
       {/* Texture layers */}
       <div className="bg-grain z-10" aria-hidden></div>
@@ -127,9 +152,6 @@ export default function Home() {
           <h1 className="dune-heading text-glow uppercase text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-dune-primary">
             PEMILU HIMAFI ITB 2026/2027
           </h1>
-          <p className="font-garet text-sm md:text-base opacity-80 max-w-xl mx-auto leading-relaxed">
-            Hub terpusat untuk dokumen dan link penting Pemilu. Diperbarui secara otomatis dari Google Sheet.
-          </p>
         </div>
 
         {/* Status / Tips */}
@@ -173,7 +195,7 @@ export default function Home() {
               {Object.entries(grouped).map(([category, items]) => (
                 <div key={category} className="space-y-3">
                   <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-dune-text/70 font-dune text-glow">
-                    <span className="h-[1px] w-6 bg-dune-primary/60" aria-hidden />
+                    <span className="h-px w-6 bg-dune-primary/60" aria-hidden />
                     <span>{category}</span>
                   </div>
 
@@ -203,6 +225,9 @@ export default function Home() {
           PANITIA PEMILU HIMAFI 2026/2027
         </footer>
       </div>
+
+      {/* Music Player */}
+      <MusicPlayer />
     </main>
   );
 }
