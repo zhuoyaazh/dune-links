@@ -46,9 +46,9 @@ export default function MusicPlayer() {
       {/* --- 1. WELCOME SCREEN (Hanya muncul sebelum user klik Enter) --- */}
       {!hasInteracted && (
         <>
-          {/* Left Gate */}
+          {/* Left Gate - Desktop */}
           <div
-            className={`fixed top-0 left-0 w-1/2 h-screen z-100 transition-transform duration-[2000ms] ease-in-out ${isGateOpening ? '-translate-x-full' : 'translate-x-0'}`}
+            className={`hidden md:block fixed top-0 left-0 w-1/2 h-screen z-100 transition-transform duration-[2000ms] ease-in-out ${isGateOpening ? '-translate-x-full' : 'translate-x-0'}`}
             style={{
               backgroundImage: "url('/bg-dune-dark.jpg')",
               backgroundSize: "200% 100%",
@@ -61,11 +61,41 @@ export default function MusicPlayer() {
             <div className="absolute inset-0 opacity-10 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none"></div>
           </div>
 
-          {/* Right Gate */}
+          {/* Right Gate - Desktop */}
           <div
-            className={`fixed top-0 right-0 w-1/2 h-screen z-100 transition-transform duration-[2000ms] ease-in-out ${isGateOpening ? 'translate-x-full' : 'translate-x-0'}`}
+            className={`hidden md:block fixed top-0 right-0 w-1/2 h-screen z-100 transition-transform duration-[2000ms] ease-in-out ${isGateOpening ? 'translate-x-full' : 'translate-x-0'}`}
             style={{
               backgroundImage: "url('/bg-dune-dark.jpg')",
+              backgroundSize: "200% 100%",
+              backgroundPosition: "right center",
+              backgroundRepeat: "no-repeat",
+              willChange: "transform",
+            }}
+          >
+            <div className="absolute inset-0 bg-black/40"></div>
+            <div className="absolute inset-0 opacity-10 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none"></div>
+          </div>
+
+          {/* Left Gate - Mobile */}
+          <div
+            className={`md:hidden fixed top-0 left-0 w-1/2 h-screen z-100 transition-transform duration-[2000ms] ease-in-out ${isGateOpening ? '-translate-x-full' : 'translate-x-0'}`}
+            style={{
+              backgroundImage: "url('/bg-dune-dark-mobile.jpg')",
+              backgroundSize: "200% 100%",
+              backgroundPosition: "left center",
+              backgroundRepeat: "no-repeat",
+              willChange: "transform",
+            }}
+          >
+            <div className="absolute inset-0 bg-black/40"></div>
+            <div className="absolute inset-0 opacity-10 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none"></div>
+          </div>
+
+          {/* Right Gate - Mobile */}
+          <div
+            className={`md:hidden fixed top-0 right-0 w-1/2 h-screen z-100 transition-transform duration-[2000ms] ease-in-out ${isGateOpening ? 'translate-x-full' : 'translate-x-0'}`}
+            style={{
+              backgroundImage: "url('/bg-dune-dark-mobile.jpg')",
               backgroundSize: "200% 100%",
               backgroundPosition: "right center",
               backgroundRepeat: "no-repeat",
