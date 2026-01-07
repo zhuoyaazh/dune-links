@@ -51,8 +51,8 @@ export default function MusicPlayer() {
             className={`fixed top-0 left-0 w-1/2 h-screen z-100 transition-transform duration-[2000ms] ease-in-out ${isGateOpening ? '-translate-x-full' : 'translate-x-0'}`}
             style={{
               backgroundImage: "url('/DUNE-GATE4.jpg')",
-              backgroundSize: "cover",
-              backgroundPosition: "left center",
+              backgroundSize: window.innerWidth < 768 ? "cover" : "200% 100%",
+              backgroundPosition: window.innerWidth < 768 ? "center" : "0 center",
               backgroundRepeat: "no-repeat",
               willChange: "transform",
             }}
@@ -66,8 +66,8 @@ export default function MusicPlayer() {
             className={`fixed top-0 right-0 w-1/2 h-screen z-100 transition-transform duration-[2000ms] ease-in-out ${isGateOpening ? 'translate-x-full' : 'translate-x-0'}`}
             style={{
               backgroundImage: "url('/DUNE-GATE4.jpg')",
-              backgroundSize: "cover",
-              backgroundPosition: "right center",
+              backgroundSize: window.innerWidth < 768 ? "cover" : "200% 100%",
+              backgroundPosition: window.innerWidth < 768 ? "center" : "100% center",
               backgroundRepeat: "no-repeat",
               willChange: "transform",
             }}
