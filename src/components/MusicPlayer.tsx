@@ -63,21 +63,23 @@ export default function MusicPlayer() {
             className={`fixed top-0 left-0 w-1/2 h-screen z-100 transition-transform duration-[2000ms] ease-in-out ${isGateOpening ? '-translate-x-full' : 'translate-x-0'}`}
             style={{
               backgroundImage: "url('/DUNE-GATE4.jpg')",
-              backgroundSize: isDesktop ? "200% 100%" : "cover",
-              backgroundPosition: isDesktop ? "0 center" : "center",
+              backgroundSize: "cover",
+              backgroundPosition: isDesktop ? "0 center" : "left center",
               backgroundRepeat: "no-repeat",
               willChange: "transform",
             }}
           >
             <div className="absolute inset-0 bg-black/40"></div>
             <div className="absolute inset-0 opacity-10 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none"></div>
-          </div>          {/* Right Gate */}
+          </div>
+
+          {/* Right Gate */}
           <div 
             className={`fixed top-0 right-0 w-1/2 h-screen z-100 transition-transform duration-[2000ms] ease-in-out ${isGateOpening ? 'translate-x-full' : 'translate-x-0'}`}
             style={{
               backgroundImage: "url('/DUNE-GATE4.jpg')",
-              backgroundSize: isDesktop ? "200% 100%" : "cover",
-              backgroundPosition: isDesktop ? "100% center" : "center",
+              backgroundSize: "cover",
+              backgroundPosition: isDesktop ? "100% center" : "right center",
               backgroundRepeat: "no-repeat",
               willChange: "transform",
             }}
